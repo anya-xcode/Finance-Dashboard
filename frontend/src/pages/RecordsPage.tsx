@@ -211,14 +211,14 @@ const RecordsPage: React.FC = () => {
       </div>
 
       <div className="glass-card overflow-hidden">
-        <table className="w-full text-left">
+        <table className="w-full" style={{ tableLayout: 'fixed' }}>
           <thead>
             <tr className="border-b border-white/5 text-secondary text-xs uppercase font-black tracking-widest">
-              <th className="p-6">Date</th>
-              <th className="p-6">Category</th>
-              <th className="p-6">Description</th>
-              <th className="p-6 text-right">Amount</th>
-              {isAdmin && <th className="p-6 text-center">Actions</th>}
+              <th className="p-6" style={{ width: '15%', textAlign: 'left' }}>Date</th>
+              <th className="p-6" style={{ width: '20%', textAlign: 'left' }}>Category</th>
+              <th className="p-6" style={{ width: 'auto', textAlign: 'left' }}>Description</th>
+              <th className="p-6" style={{ width: '20%', textAlign: 'right' }}>Amount</th>
+              {isAdmin && <th className="p-6" style={{ width: '15%', textAlign: 'center' }}>Actions</th>}
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
@@ -237,22 +237,20 @@ const RecordsPage: React.FC = () => {
             ) : (
               records.map((record) => (
                 <tr key={record.id} className="hover:bg-white/5 transition">
-                  <td className="p-6 text-xs font-mono text-secondary">
+                  <td className="p-6 text-xs font-mono text-secondary" style={{ verticalAlign: 'middle', textAlign: 'left' }}>
                     {new Date(record.date).toLocaleDateString()}
                   </td>
-                  <td className="p-6">
+                  <td className="p-6" style={{ verticalAlign: 'middle', textAlign: 'left' }}>
                     <span className="badge badge-success text-xs" style={{ fontSize: '10px' }}>{record.category}</span>
                   </td>
-                  <td className="p-6">
-                    <div className="text-sm font-bold">{record.description || 'Null Header'}</div>
+                  <td className="p-6" style={{ verticalAlign: 'middle', textAlign: 'left' }}>
+                    <div className="text-sm font-bold" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '90%' }}>{record.description || 'Null Header'}</div>
                   </td>
-                  <td className={`p-6 text-sm font-black text-right tracking-tighter ${
-                    record.type === 'income' ? 'text-emerald-400' : 'text-rose-400'
-                  }`}>
+                  <td className="p-6 text-sm font-black tracking-tighter" style={{ verticalAlign: 'middle', textAlign: 'right', color: record.type === 'income' ? '#34d399' : '#fb7185' }}>
                     {record.type === 'income' ? '+' : '-'} ₹{record.amount.toLocaleString()}
                   </td>
                   {isAdmin && (
-                    <td className="p-6">
+                    <td className="p-6" style={{ verticalAlign: 'middle', textAlign: 'center' }}>
                       <div className="flex justify-center gap-4">
                         <button onClick={() => startEdit(record)} style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer' }}>
                           <Pencil size={18} />

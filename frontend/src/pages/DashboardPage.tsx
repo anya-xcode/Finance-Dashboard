@@ -181,28 +181,30 @@ const DashboardPage: React.FC = () => {
       {/* Recent Activity */}
       <div className="glass-card p-8 overflow-hidden">
         <h3 className="text-2xl font-black tracking-tighter mb-8">Security Log</h3>
-        <table className="w-full text-left">
+        <table className="w-full" style={{ tableLayout: 'fixed' }}>
           <thead>
             <tr className="border-b border-white/5 text-secondary text-xs uppercase font-bold tracking-widest">
-              <th className="pb-6">Timestamp</th>
-              <th className="pb-6">Class</th>
-              <th className="pb-6">Identity Header</th>
-              <th className="pb-6 text-right">Value</th>
+              <th className="pb-6" style={{ width: '20%', textAlign: 'left' }}>Timestamp</th>
+              <th className="pb-6" style={{ width: '20%', textAlign: 'left' }}>Class</th>
+              <th className="pb-6" style={{ width: 'auto', textAlign: 'left' }}>Identity Header</th>
+              <th className="pb-6 text-right" style={{ width: '25%', textAlign: 'right' }}>Value</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
             {recentActivity.map((record) => (
               <tr key={record.id} className="hover:bg-white/5 transition">
-                <td className="py-5 text-xs font-mono text-secondary">
+                <td className="py-5 text-xs font-mono text-secondary" style={{ verticalAlign: 'middle', textAlign: 'left' }}>
                   {new Date(record.date).toLocaleDateString()}
                 </td>
-                <td className="py-5">
+                <td className="py-5" style={{ verticalAlign: 'middle', textAlign: 'left' }}>
                   <span className="badge badge-success text-xs" style={{ fontSize: '10px' }}>{record.category}</span>
                 </td>
-                <td className="py-5 text-sm font-bold">
-                  {record.description}
+                <td className="py-5 text-sm font-bold" style={{ verticalAlign: 'middle', textAlign: 'left' }}>
+                  <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '95%' }}>
+                    {record.description}
+                  </div>
                 </td>
-                <td className={`py-5 text-sm font-black text-right ${record.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                <td className="py-5 text-sm font-black text-right" style={{ verticalAlign: 'middle', textAlign: 'right', color: record.type === 'income' ? '#34d399' : '#fb7185' }}>
                   {record.type === 'income' ? '+' : '-'} ₹{record.amount.toLocaleString()}
                 </td>
               </tr>
