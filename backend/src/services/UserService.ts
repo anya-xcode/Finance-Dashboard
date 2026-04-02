@@ -36,7 +36,7 @@ export class UserService {
     }
 
     return {
-      id: user._id,
+      id: user._id.toString(),
       name: user.name,
       email: user.email,
       role: user.role,
@@ -58,7 +58,7 @@ export class UserService {
     }
 
     return {
-      id: updated._id,
+      id: updated._id.toString(),
       name: updated.name,
       email: updated.email,
       role: updated.role,
