@@ -12,8 +12,10 @@ import { errorHandler } from './middleware/errorHandler';
 const app = express();
 
 // ---- Global Middleware ----
+const frontendUrl = process.env.FRONTEND_URL || 'https://finance-dashboard-omega-murex.vercel.app';
+
 app.use(cors({
-  origin: ['https://finance-dashboard-omega-murex.vercel.app', 'http://localhost:5173'],
+  origin: [frontendUrl, 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
