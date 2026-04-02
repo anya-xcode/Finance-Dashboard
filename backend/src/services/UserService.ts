@@ -19,7 +19,7 @@ export class UserService {
     const users = await this.userRepo.findAll({});
     // Strip passwords from response
     return users.map((user) => ({
-      id: user._id,
+      id: user._id.toString(),
       name: user.name,
       email: user.email,
       role: user.role,

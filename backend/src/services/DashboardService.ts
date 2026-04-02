@@ -76,6 +76,10 @@ export class DashboardService {
 
   /** Get most recent activity */
   async getRecentActivity(limit: number = 10) {
-    return this.recordRepo.getRecentRecords(limit);
+    const results = await this.recordRepo.getRecentRecords(limit);
+    return results.map((record: any) => ({
+      ...record.toObject ? record.toObject() : record,
+      id: record._id.toString(),
+    }));
   }
 }

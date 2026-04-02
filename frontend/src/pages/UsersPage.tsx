@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/api';
-import { X, Check, Loader2 } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -40,68 +40,83 @@ const UsersPage: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="container p-10 text-center"><Loader2 className="animate-spin inline-block mr-2" /> Loading users...</div>;
+  if (loading) return (
+    <div className="container flex flex-col items-center justify-center p-12 gap-4">
+      <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+      <p className="text-secondary font-bold">Synchronizing access protocols...</p>
+    </div>
+  );
 
   return (
-    <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">System Access Management</h1>
-        <p className="text-secondary mt-1">Audit and modify user roles and permissions.</p>
-      </div>
+    <div className="container space-y-10">
+      <header>
+        <div className="flex items-center gap-2 mb-2">
+          <Shield size={16} className="text-indigo-400" />
+          <span className="text-xs font-black text-indigo-400 uppercase tracking-widest">Security Protocol 442</span>
+        </div>
+        <h1 className="text-4xl font-black tracking-tighter">System Access Control</h1>
+        <p className="text-secondary">Manage authorization headers and primary access keys.</p>
+      </header>
 
       <div className="glass-card overflow-hidden">
         <table className="w-full text-left">
           <thead>
-            <tr className="border-b border-white/10 text-secondary text-sm">
-              <th className="p-6 font-medium">Name</th>
-              <th className="p-6 font-medium">Email</th>
-              <th className="p-6 font-medium text-center">Current Role</th>
-              <th className="p-6 font-medium text-center">Status</th>
-              <th className="p-6 font-medium text-center">Update Role</th>
+            <tr className="border-b border-white/5 text-secondary text-xs uppercase font-black tracking-widest">
+              <th className="p-8">Identity</th>
+              <th className="p-8">Role</th>
+              <th className="p-8 text-center">Status</th>
+              <th className="p-8 text-center">Authorization</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5">
+          <tbody className="divide-y divide-white/5" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             {users.map((u) => (
               <tr key={u.id} className="hover:bg-white/5 transition">
-                <td className="p-6 font-medium">{u.name}</td>
-                <td className="p-6 text-sm text-secondary">{u.email}</td>
-                <td className="p-6 text-center">
-                  <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
-                    u.role === 'admin' ? 'bg-purple-500/20 text-purple-400' : 
-                    u.role === 'analyst' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-gray-500/20 text-gray-400'
-                  }`}>
+                <td className="p-8">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-gradient-indigo flex items-center justify-center text-white font-black text-xs shadow-lg">
+                      {u.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <div className="font-extrabold text-sm tracking-tight">{u.name}</div>
+                      <div className="text-xs text-secondary opacity-60 font-mono">{u.email}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="p-8">
+                  <span className={`badge ${u.role === 'admin' ? 'badge-danger' : 'badge-success'} text-xs`} style={{ fontSize: '10px' }}>
                     {u.role}
                   </span>
                 </td>
-                <td className="p-6">
-                  <div className="flex justify-center">
-                    <button 
-                      onClick={() => handleToggleActive(u.id, u.isActive)}
-                      className={`flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full border transition ${
-                        u.isActive 
-                        ? 'border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10' 
-                        : 'border-rose-500/30 text-rose-500 hover:bg-rose-500/10'
-                      }`}
-                    >
-                      {u.isActive ? <Check size={14} /> : <X size={14} />}
-                      {u.isActive ? 'Active' : 'Inactive'}
-                    </button>
-                  </div>
+                <td className="p-8 text-center">
+                  <button 
+                    onClick={() => handleToggleActive(u.id, u.isActive)}
+                    className="badge text-xs"
+                    style={{ 
+                      backgroundColor: u.isActive ? 'rgba(16,185,129,0.1)' : 'rgba(244,63,94,0.1)',
+                      color: u.isActive ? '#10b981' : '#f43f5e',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {u.isActive ? 'ACTIVE' : 'OFFLINE'}
+                  </button>
                 </td>
-                <td className="p-6">
+                <td className="p-8">
                   <div className="flex justify-center gap-2">
-                    {['viewer', 'analyst', 'admin'].map(r => (
+                    {['viewer', 'analyst', 'admin'].map(role => (
                       <button
-                        key={r}
-                        disabled={u.role === r}
-                        onClick={() => handleRoleChange(u.id, r)}
-                        className={`px-3 py-1 text-[10px] uppercase font-bold rounded-md transition ${
-                          u.role === r 
-                          ? 'bg-white/10 text-white cursor-default' 
-                          : 'bg-white/5 text-secondary hover:text-white hover:bg-indigo-500/30'
-                        }`}
+                        key={role}
+                        disabled={u.role === role}
+                        onClick={() => handleRoleChange(u.id, role)}
+                        className="px-3 py-1.5 text-xs uppercase font-bold rounded-lg transition"
+                        style={{ 
+                          backgroundColor: u.role === role ? '#6366f1' : 'rgba(255,255,255,0.05)',
+                          color: u.role === role ? 'white' : '#94a3b8',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
                       >
-                        {r}
+                        {role}
                       </button>
                     ))}
                   </div>

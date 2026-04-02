@@ -11,6 +11,7 @@ import {
   createRecordValidation,
   updateRecordValidation,
   recordFilterValidation,
+  recordIdValidation,
 } from '../middleware/validate';
 
 const router = Router();
@@ -21,11 +22,11 @@ router.use(authMiddleware);
 
 // Read operations — available to all authenticated users
 router.get('/', recordFilterValidation, controller.getAll);
-router.get('/:id', controller.getById);
+router.get('/:id', recordIdValidation, controller.getById);
 
 // Write operations — Admin only
 router.post('/', roleMiddleware(UserRole.ADMIN), createRecordValidation, controller.create);
-router.patch('/:id', roleMiddleware(UserRole.ADMIN), updateRecordValidation, controller.update);
-router.delete('/:id', roleMiddleware(UserRole.ADMIN), controller.delete);
+router.patch('/:id', roleMiddleware(UserRole.ADMIN), recordIdValidation, updateRecordValidation, controller.update);
+router.delete('/:id', roleMiddleware(UserRole.ADMIN), recordIdValidation, controller.delete);
 
 export default router;

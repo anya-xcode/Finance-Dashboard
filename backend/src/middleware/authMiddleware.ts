@@ -6,6 +6,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from '../services/AuthService';
+import { UserRepository } from '../repositories';
 import { ApiError } from '../utils/ApiError';
 
 // Extend Express Request to include user info
@@ -22,8 +23,9 @@ declare global {
 }
 
 const authService = new AuthService();
+const userRepo = new UserRepository();
 
-export const authMiddleware = (req: Request, _res: Response, next: NextFunction): void => {
+export const authMiddleware = async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
   try {
     // Get token from header: "Bearer <token>"
     const authHeader = req.headers.authorization;
@@ -34,8 +36,24 @@ export const authMiddleware = (req: Request, _res: Response, next: NextFunction)
     const token = authHeader.split(' ')[1];
     const decoded = authService.verifyToken(token);
 
-    // Attach user info to the request object
-    req.user = decoded;
+    // LIVE ROLE DETECTION: Fetch the latest user data from DB
+    // This ensures permissions update instantly even if the JWT remains stale.
+    const user = await userRepo.findById(decoded.userId);
+    if (!user) {
+      throw ApiError.unauthorized('User associated with this token no longer exists');
+    }
+
+    if (!user.isActive) {
+      throw ApiError.forbidden('Account has been deactivated');
+    }
+
+    // Attach latest info to the request object
+    req.user = {
+      userId: user._id.toString(),
+      email: user.email,
+      role: user.role,
+    };
+    
     next();
   } catch (error) {
     next(error);

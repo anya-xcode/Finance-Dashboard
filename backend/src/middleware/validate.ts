@@ -4,7 +4,7 @@
 // Defines validation rules for each route and a middleware
 // to check for validation errors before hitting the controller.
 
-import { body, query, validationResult } from 'express-validator';
+import { body, query, param, validationResult } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
 import { RecordType, RecordCategory } from '../types/enums';
 
@@ -12,6 +12,7 @@ import { RecordType, RecordCategory } from '../types/enums';
 export const handleValidationErrors = (req: Request, res: Response, next: NextFunction): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.error('[ValidationError]', errors.array());
     res.status(400).json({
       success: false,
       message: 'Validation failed',
@@ -24,6 +25,12 @@ export const handleValidationErrors = (req: Request, res: Response, next: NextFu
   }
   next();
 };
+
+/** Rules for record ID parameter */
+export const recordIdValidation = [
+  param('id').isMongoId().withMessage('Invalid record ID format'),
+  handleValidationErrors,
+];
 
 // ---- Validation Rules ----
 
@@ -106,11 +113,11 @@ export const updateRecordValidation = [
 /** Rules for record query filters */
 export const recordFilterValidation = [
   query('type')
-    .optional()
+    .optional({ checkFalsy: true })
     .isIn(Object.values(RecordType))
     .withMessage(`Type must be one of: ${Object.values(RecordType).join(', ')}`),
   query('category')
-    .optional()
+    .optional({ checkFalsy: true })
     .isIn(Object.values(RecordCategory))
     .withMessage(`Invalid category`),
   query('startDate')

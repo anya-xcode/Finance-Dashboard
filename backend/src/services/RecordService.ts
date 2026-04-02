@@ -30,8 +30,13 @@ export class RecordService {
 
     const { data, total } = await this.recordRepo.findFiltered(filters);
 
+    const formattedData = data.map((record: any) => ({
+      ...record.toObject ? record.toObject() : record,
+      id: record._id.toString(),
+    }));
+
     return {
-      data,
+      data: formattedData,
       total,
       page,
       limit,
@@ -45,7 +50,10 @@ export class RecordService {
     if (!record || record.isDeleted) {
       throw ApiError.notFound('Record not found');
     }
-    return record;
+    return {
+      ...record.toObject ? record.toObject() : record,
+      id: record._id.toString(),
+    };
   }
 
   /** Update a record */
@@ -64,7 +72,12 @@ export class RecordService {
     if (updates.description !== undefined) updateData.description = updates.description;
 
     const updated = await this.recordRepo.updateById(id, updateData);
-    return updated;
+    if (!updated) return null;
+
+    return {
+      ...updated.toObject ? updated.toObject() : updated,
+      id: updated._id.toString(),
+    };
   }
 
   /** Soft delete a record */

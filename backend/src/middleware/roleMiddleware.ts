@@ -25,10 +25,14 @@ export const roleMiddleware = (...allowedRoles: UserRole[]) => {
       }
 
       // Check if user's role is in the allowed list
-      const userRole = req.user.role as UserRole;
-      if (!allowedRoles.includes(userRole)) {
+      const userRole = (req.user.role as string).toLowerCase();
+      const normalizedAllowedRoles = allowedRoles.map(r => r.toLowerCase());
+
+      console.log(`[RoleMiddleware] Access Attempt: UserRole=${userRole}, AllowedRoles=${normalizedAllowedRoles}`);
+
+      if (!normalizedAllowedRoles.includes(userRole)) {
         throw ApiError.forbidden(
-          `Access denied. Required role: ${allowedRoles.join(' or ')}. Your role: ${userRole}`
+          `Permission Denied. Required: ${allowedRoles.join('/')}. Identified as: ${userRole}. If you recently changed your role, please log out and back in.`
         );
       }
 

@@ -45,7 +45,7 @@ export class RecordController {
   /** GET /api/records/:id */
   getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const record = await this.recordService.getRecordById(req.params.id);
+      const record = await this.recordService.getRecordById(req.params.id as string);
       res.status(200).json(ApiResponse.success(record));
     } catch (error) {
       next(error);
@@ -55,9 +55,12 @@ export class RecordController {
   /** PATCH /api/records/:id */
   update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const record = await this.recordService.updateRecord(req.params.id, req.body);
+      const id = req.params.id as string;
+      console.log(`[RecordController] Updating record ${id}`, req.body);
+      const record = await this.recordService.updateRecord(id, req.body);
       res.status(200).json(ApiResponse.success(record, 'Record updated successfully'));
     } catch (error) {
+      console.error(`[RecordController] Update failed for ${req.params.id}:`, error);
       next(error);
     }
   };
@@ -65,7 +68,7 @@ export class RecordController {
   /** DELETE /api/records/:id */
   delete = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await this.recordService.deleteRecord(req.params.id);
+      const result = await this.recordService.deleteRecord(req.params.id as string);
       res.status(200).json(ApiResponse.success(result));
     } catch (error) {
       next(error);
