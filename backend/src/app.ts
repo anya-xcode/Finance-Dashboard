@@ -12,7 +12,12 @@ import { errorHandler } from './middleware/errorHandler';
 const app = express();
 
 // ---- Global Middleware ----
-app.use(cors());                    // Allow cross-origin requests (for React frontend)
+app.use(cors({
+  origin: ['https://finance-dashboard-omega-murex.vercel.app', 'http://localhost:5173'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(express.json());            // Parse JSON request bodies
 app.use(express.urlencoded({ extended: true }));
 
