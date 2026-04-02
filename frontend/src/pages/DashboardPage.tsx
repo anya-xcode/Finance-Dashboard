@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import api from '../api/api';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
-import { 
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+import {
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area, Cell, PieChart, Pie
 } from 'recharts';
 import { TrendingUp, TrendingDown, IndianRupee, Activity, AlertCircle } from 'lucide-react';
 
 const StatCard = ({ title, value, icon: Icon, colorClass, delay, prefix = "₹" }: any) => (
-  <motion.div 
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay }}
@@ -62,7 +62,7 @@ const DashboardPage: React.FC = () => {
 
   const role = user?.role?.toLowerCase();
   const canSeeAnalytics = role === 'admin' || role === 'analyst' || role === 'viewer';
-  
+
   useEffect(() => {
     console.log(`[DashboardPage] Analytics Visibility Check:`, { role, canSeeAnalytics });
     const fetchData = async () => {
@@ -138,12 +138,12 @@ const DashboardPage: React.FC = () => {
                 <AreaChart data={monthlyTrends}>
                   <defs>
                     <linearGradient id="colorInc" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.1}/>
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.1} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.1}/>
-                      <stop offset="95%" stopColor="#f43f5e" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.1} />
+                      <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
