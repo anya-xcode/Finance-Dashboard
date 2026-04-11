@@ -91,9 +91,23 @@ The application uses a custom `authMiddleware` that doesn't just trust the role 
 
 | Role | Permissions |
 | :--- | :--- |
-| **Admin** | Create, Update, Delete Records, Access Ledger & Users, View Dashboard |
-| **Analyst** | Access Ledger, View Dashboard & Analytics |
-| **Viewer** | View Dashboard (Summary only) |
+| **Admin** | Create, Update, Delete Records, Access Ledger & Users, View Dashboard, Export CSV |
+| **Analyst** | Access Ledger, View Dashboard & Analytics, Export CSV |
+| **Viewer** | View Dashboard (Summary Cards only), View Ledger (Read-only, No Export) |
+
+---
+
+## 🧪 Test Credentials
+
+Use the following credentials to test the application with different roles:
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@gmail.com` | `admin@123` |
+| **Analyst** | `analyst@gmail.com` | `analyst@123` |
+| **Viewer** | `viewer@gmail.com` | `viewer@123` |
+
+> **Note:** Register with the above emails via the Registration page, or use the seed script (`npm run seed`) to pre-populate the database with test users.
 
 ---
 

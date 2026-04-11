@@ -21,6 +21,7 @@ const RecordsPage: React.FC = () => {
   });
 
   const isAdmin = user?.role?.toLowerCase() === 'admin';
+  const canExport = isAdmin || user?.role?.toLowerCase() === 'analyst';
 
   const fetchRecords = async () => {
     setLoading(true);
@@ -155,12 +156,14 @@ const RecordsPage: React.FC = () => {
           <p className="text-secondary">Detailed audit trail of all transactions.</p>
         </div>
         <div className="flex gap-4">
-          <button 
-            onClick={handleExportCSV}
-            className="btn-outline flex items-center gap-2"
-          >
-            <Download size={18} /> Export CSV
-          </button>
+          {canExport && (
+            <button 
+              onClick={handleExportCSV}
+              className="btn-outline flex items-center gap-2"
+            >
+              <Download size={18} /> Export CSV
+            </button>
+          )}
           {isAdmin && (
             <motion.button 
               whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}

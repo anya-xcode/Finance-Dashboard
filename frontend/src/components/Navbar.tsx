@@ -67,12 +67,13 @@ const Navbar: React.FC = () => {
             
             <motion.button 
               onClick={handleLogout} 
-              className="p-2.5 rounded-xl bg-rose-500 shadow-lg"
-              style={{ backgroundColor: 'rgba(244, 63, 94, 0.1)', color: '#fb7185', border: 'none', cursor: 'pointer' }}
-              whileHover={{ scale: 1.1, backgroundColor: 'rgba(244, 63, 94, 0.2)' }}
-              whileTap={{ scale: 0.9 }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm tracking-tight"
+              style={{ backgroundColor: 'rgba(244, 63, 94, 0.1)', color: '#fb7185', border: '1px solid rgba(244, 63, 94, 0.15)', cursor: 'pointer' }}
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(244, 63, 94, 0.2)' }}
+              whileTap={{ scale: 0.95 }}
             >
-              <LogOut size={20} />
+              <LogOut size={18} />
+              Logout
             </motion.button>
           </div>
         </div>
